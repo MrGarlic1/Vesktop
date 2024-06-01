@@ -429,6 +429,7 @@ function createMainWindow() {
         autoHideMenuBar: enableMenu
     }));
     win.setMenuBarVisibility(false);
+    if (process.platform === "darwin" && customTitleBar) win.setWindowButtonVisibility(false);
 
     win.on("close", e => {
         const useTray = !isDeckGameMode && Settings.store.minimizeToTray !== false && Settings.store.tray !== false;
@@ -441,8 +442,6 @@ function createMainWindow() {
 
         return false;
     });
-
-    if (process.platform === "darwin" && customTitleBar) win.setWindowButtonVisibility(false);
 
     if (Settings.store.staticTitle) win.on("page-title-updated", e => e.preventDefault());
 
