@@ -22,7 +22,6 @@ import { IpcEvents } from "shared/IpcEvents";
 import { isTruthy } from "shared/utils/guards";
 import { once } from "shared/utils/once";
 import type { SettingsStore } from "shared/utils/SettingsStore";
-
 import { ICON_PATH } from "../shared/paths";
 import { createAboutWindow } from "./about";
 import { initArRPC } from "./arrpc";
@@ -289,7 +288,7 @@ function getWindowBoundsOptions(): BrowserWindowConstructorOptions {
 function getDarwinOptions(): BrowserWindowConstructorOptions {
     const options = {
         titleBarStyle: "hidden",
-        trafficLightPosition: { x: 10, y: 10 }
+        trafficLightPosition: Settings.store.customTitleBar ? undefined : { x: 10, y: 10 }
     } as BrowserWindowConstructorOptions;
 
     const { splashTheming, splashBackground } = Settings.store;
@@ -442,6 +441,8 @@ function createMainWindow() {
 
         return false;
     });
+
+    if (process.platform === "darwin" && customTitleBar) win.setWindowButtonVisibility(false);
 
     if (Settings.store.staticTitle) win.on("page-title-updated", e => e.preventDefault());
 
